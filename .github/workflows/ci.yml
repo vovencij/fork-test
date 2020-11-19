@@ -33,8 +33,8 @@ jobs:
           tag: jetty-9.4.34.v20201102
           file: jetty-home-9.4.34.v20201102.zip
       - run: Get-ChildItem
-      - name: Unzip jetty
-        run: unzip jetty-home-9.4.34.v20201102.zip
+#      - name: Unzip jetty
+#        run: unzip jetty-home-9.4.34.v20201102.zip
 
       - name: Download Release Collector
         uses: i3h/download-release-asset@v1
@@ -43,6 +43,8 @@ jobs:
           repo: opentelemetry-collector
           tag: latest
           file: otelcol_windows_amd64.exe
+
+      - run: Get-ChildItem
 
       - name: Build docker image
         run: Move-Item otelcol_windows_amd64.exe src/collector
