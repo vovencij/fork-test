@@ -31,7 +31,10 @@ jobs:
           owner: eclipse
           repo: jetty.project
           tag: jetty-9.4.34.v20201102
-          file: jetty-home-9.4.34.v20201102.tar.gz
+          file: jetty-home-9.4.34.v20201102.zip
+
+      - name: Unzip jetty
+        run: unzip jetty-home-9.4.34.v20201102.zip
 
       - name: Download Release Collector
         uses: i3h/download-release-asset@v1
@@ -42,7 +45,8 @@ jobs:
           file: otelcol_windows_amd64.exe
 
       - name: Build docker image
-        run: docker build -t opentelemetry/collector .
+        run: Move-Item otelcol_windows_amd64.exe src/collector
+      - run: docker build -t opentelemetry/collector src/collector
 
       - name: Start collector and app
         run: docker-compose -f src\main\resources\docker-compose.yml up -d
