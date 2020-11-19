@@ -20,13 +20,14 @@ class AppTest extends Specification {
 
   DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
   DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
-      .dockerHost(config.getDockerHost())
+      .dockerHost(new URI("tcp://localhost:2375"))
       .sslConfig(config.getSSLConfig())
       .build();
   DockerClient dockerClient = DockerClientImpl.getInstance(config, httpClient);
 
   def "Container starts"() {
-    def imageId = "winamd64/openjdk:11.0.9.1-jdk-windowsservercore-1809"
+    def imageId = "openjdk:8-windowsservercore"
+//    def imageId = "winamd64/openjdk:11.0.9.1-jdk-windowsservercore-1809"
     // def imageId = "openjdk:8"
     setup:
     dockerClient.pullImageCmd(imageId).start().awaitCompletion()
