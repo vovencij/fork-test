@@ -26,4 +26,4 @@ jobs:
           java-version: '8'
 
       - name: try docker windows
-        run: docker-compose -f src\resources\docker-compose.yml up -d
+        run: docker-compose -f src\main\resources\docker-compose.yml up -d
