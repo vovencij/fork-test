@@ -4,3 +4,8 @@ services:
   jdk:
     image: openjdk:8-windowsservercore
     command: java -version
+
+  collector:
+    image: opentelemetry/collector
+    ports:
+      - "55680:55680"

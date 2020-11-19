@@ -33,5 +33,8 @@ jobs:
           tag: latest
           file: otelcol_windows_amd64.exe
 
-#      - name: try docker windows
-#        run: docker-compose -f src\main\resources\docker-compose.yml up -d
+      - name: Build docker image
+        run: docker build -t opentelemetry/collector .
+
+      - name: try docker windows
+        run: docker-compose -f src\main\resources\docker-compose.yml up -d
