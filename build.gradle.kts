@@ -16,5 +16,6 @@ dependencies {
   // Use the awesome Spock testing and specification framework even with Java
   testImplementation("org.spockframework:spock-core:1.3-groovy-2.5")
   testImplementation("junit:junit:4.13")
+  testRuntimeOnly("ch.qos.logback:logback-classic:1.2.3")
 }
 
