@@ -25,6 +25,14 @@ jobs:
         with:
           java-version: '8'
 
+      - name: Download tomcat
+        uses: i3h/download-release-asset@v1
+        with:
+          owner: apache
+          repo: tomcat
+          tag: 9.0.40
+          file: 9.0.40.zip
+
       - name: Download Release Collector
         uses: i3h/download-release-asset@v1
         with:
