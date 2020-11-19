@@ -40,4 +40,4 @@ jobs:
         run: docker-compose -f src\main\resources\docker-compose.yml up -d
 
       - name: Run tests
-        run: gradlew -i test
+        run: ./gradlew -i test
