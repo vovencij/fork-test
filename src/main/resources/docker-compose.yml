@@ -1,0 +1,6 @@
+version: "3.8"
+services:
+
+  jdk:
+    image: openjdk:8-windowsservercore
+    command: java -version

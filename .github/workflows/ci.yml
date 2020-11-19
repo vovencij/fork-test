@@ -26,7 +26,4 @@ jobs:
           java-version: '8'
 
       - name: try docker windows
-        run: docker run openjdk:8-windowsservercore java -version
-
-      - name: Test
-        run: ./gradlew -i test
+        run: docker-compose -f ./src/resources/docker-compose.yml up -d
