@@ -30,7 +30,7 @@ jobs:
         with:
           owner: eclipse
           repo: jetty.project
-          tag: 9.4.34.v20201102
+          tag: jetty-9.4.34.v20201102
           file: jetty-home-9.4.34.v20201102.tar.gz
 
       - name: Download Release Collector
