@@ -28,7 +28,8 @@ jobs:
       - name: Download Release Collector
         uses: i3h/download-release-asset@v1
         with:
-          repo: open-telemetry/opentelemetry-collector
+          owner: open-telemetry
+          repo: opentelemetry-collector
           tag: latest
           file: otelcol_windows_amd64.exe
 
