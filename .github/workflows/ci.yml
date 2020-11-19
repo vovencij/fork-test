@@ -32,7 +32,7 @@ jobs:
           repo: jetty.project
           tag: jetty-9.4.34.v20201102
           file: jetty-home-9.4.34.v20201102.zip
-
+      - run: Get-ChildItem
       - name: Unzip jetty
         run: unzip jetty-home-9.4.34.v20201102.zip
 
