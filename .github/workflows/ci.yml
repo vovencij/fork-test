@@ -25,13 +25,13 @@ jobs:
         with:
           java-version: '8'
 
-      - name: Download tomcat
+      - name: Download jetty
         uses: i3h/download-release-asset@v1
         with:
-          owner: apache
-          repo: tomcat
-          tag: 9.0.40
-          file: 9.0.40.zip
+          owner: eclipse
+          repo: jetty.project
+          tag: 9.4.34.v20201102
+          file: jetty-home-9.4.34.v20201102.tar.gz
 
       - name: Download Release Collector
         uses: i3h/download-release-asset@v1
