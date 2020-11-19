@@ -3,22 +3,73 @@
  */
 package fork.test
 
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.containers.wait.strategy.Wait
+import com.github.dockerjava.api.DockerClient
+import com.github.dockerjava.api.async.ResultCallback
+import com.github.dockerjava.api.model.Frame
+import com.github.dockerjava.api.model.WaitResponse
+import com.github.dockerjava.core.DefaultDockerClientConfig
+import com.github.dockerjava.core.DockerClientConfig
+import com.github.dockerjava.core.DockerClientImpl
+import com.github.dockerjava.httpclient5.ApacheDockerHttpClient
+import com.github.dockerjava.transport.DockerHttpClient
+import groovy.util.logging.Slf4j
 import spock.lang.Specification
 
+@Slf4j
 class AppTest extends Specification {
 
-    def "Container starts"() {
-        setup:
-        GenericContainer jdk = new GenericContainer<>("winamd64/openjdk:11.0.9.1-jdk-windowsservercore-1809")
+  DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
+  DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
+      .dockerHost(config.getDockerHost())
+      .sslConfig(config.getSSLConfig())
+      .build();
+  DockerClient dockerClient = DockerClientImpl.getInstance(config, httpClient);
 
-        jdk.withCommand("java", "-version")
-        jdk.start()
+  def "Container starts"() {
+    def imageId = "winamd64/openjdk:11.0.9.1-jdk-windowsservercore-1809"
+    // def imageId = "openjdk:8"
+    setup:
+    dockerClient.pullImageCmd(imageId).start().awaitCompletion()
 
-        jdk.waitingFor(Wait.forLogMessage("version", 1))
+    def container = dockerClient
+            .createContainerCmd(imageId)
+        .withCmd("java", "-version")
+        .withAttachStdout(true)
+        .withAttachStderr(true)
+        .exec()
 
-        expect:
-        true
-    }
+    dockerClient
+        .startContainerCmd(container.id).exec()
+
+    dockerClient.waitContainerCmd(container.id).exec(new ResultCallback.Adapter<WaitResponse>() {
+      @Override
+      void onNext(WaitResponse object) {
+        log.info(object.toString())
+      }
+    }).awaitCompletion()
+
+    log.info("Started container: {}", container.id)
+
+    List<String> logLines = new ArrayList<>()
+
+    dockerClient.logContainerCmd(container.id)
+        .withSince(0)
+        .withStdErr(true)
+        .withStdOut(true)
+        .withFollowStream()
+        .withTailAll()
+        .exec(new ResultCallback.Adapter<Frame>() {
+          @Override
+          void onNext(Frame object) {
+            logLines.add(new String(object.getPayload()))
+          }
+        }).awaitCompletion()
+
+    expect:
+    logLines.find {it.contains "openjdk"} != null
+
+    cleanup:
+    dockerClient.removeContainerCmd(container.id).exec()
+  }
+
 }
