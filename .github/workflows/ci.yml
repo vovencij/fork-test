@@ -39,5 +39,7 @@ jobs:
       - name: Start collector and app
         run: docker-compose -f src\main\resources\docker-compose.yml up -d
 
+      - run: docker ps -a
+
       - name: Run tests
         run: ./gradlew -i test
